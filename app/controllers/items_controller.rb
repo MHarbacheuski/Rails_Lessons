@@ -16,8 +16,8 @@ class ItemsController < ApplicationController
     item = Item.create(items_params)
     if item.persisted?
       #render json: item.name, status:  :created
-      if @item
-        redirect_to item_path,status: :created
+      if item
+        redirect_to items_path
       end
     else
       render json: item.errors, status: :unprocessable_entity
@@ -33,6 +33,7 @@ class ItemsController < ApplicationController
 
   def edit
     #render body: 'ggg', status: 404 unless @item
+    #   binding.pry
   end
 
   def update
