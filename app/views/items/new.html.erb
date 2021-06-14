@@ -12,6 +12,9 @@
   <%= text_field_tag :name %>
   <%= label_tag :price %>
   <%= text_field_tag :price %>
+  <%= label_tag :description %>
+  <%= text_field_tag :description %>
   <%= submit_tag "Save", class:"btn btn-large btn-primary" %>
 <% end %>
 <%= link_to "index",items_path %><br/>
+<%= render partial: 'shared/email' %>

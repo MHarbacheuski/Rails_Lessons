@@ -1,21 +1,19 @@
 class ItemsController < ApplicationController
-  layout false
+  # layout false
   skip_before_action :verify_authenticity_token
   before_action :find_item, only: %i[show edit update destroy upvote]
   before_action :admin?, only: %i[edit]
-  after_action :show_info, only:%i[index]
+  after_action :show_info, only: %i[index]
 
   def index
-    @items = Item.all
-=begin
-    render body: @items.map {|i|"#{i.name}:#{i.price}"}
-=end
+     @items = Item.all
+     @items = @items.includes(:image)
   end
 
   def create
     item = Item.create(items_params)
     if item.persisted?
-      #render json: item.name, status:  :created
+      # render json: item.name, status:  :created
       if item
         redirect_to items_path
       end
@@ -28,25 +26,25 @@ class ItemsController < ApplicationController
   end
 
   def show
-    #render body: 'ggg', status: 404 unless @item
+    # render body: 'ggg', status: 404 unless @item
   end
 
   def edit
-    #render body: 'ggg', status: 404 unless @item
+    # render body: 'ggg', status: 404 unless @item
     #   binding.pry
   end
 
   def update
     if @item.update(items_params)
-    redirect_to item_path
+      redirect_to item_path
     else
-      render body:'Poka'
+      render body: 'Poka'
     end
   end
 
   def destroy
     if @item.destroy.destroyed?
-      redirect_to items_path #redirect_to '/items'
+      redirect_to items_path # redirect_to '/items'
     else
       render json: item.errors, status: :unprocessable_entity
     end
@@ -58,25 +56,25 @@ class ItemsController < ApplicationController
   end
 
   def expensive
-    @items = Item.where("price<100")
+    @items = Item.where("price>220")
     render :index
   end
 
   private
 
   def items_params
-    params.permit(:name,:price,:real,:weight,:description)
+    params.permit(:name, :price, :real, :weight, :description)
   end
 
   def find_item
-    @item = Item.where(id:params[:id]).first
+    @item = Item.where(id: params[:id]).first
     render_404 unless @item
   end
 
-  def admin?
-    render_403 unless params[:admin]
-    #render json: "Access denied", status: :forbidden unless params[:admin]
-  end
+  # def admin?
+  #   #render_403 unless params[:admin]
+  #   #render json: "Access denied", status: :forbidden unless params[:admin]
+  # end
 
   def show_info
     puts "Index endpoint"
