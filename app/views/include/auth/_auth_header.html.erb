@@ -1,0 +1,15 @@
+<% if user_signed_in? %>
+  <a href="#" class="btn btn-dark">
+    Добро Пожаловать, <%= current_user.email %>
+  </a>
+  <%= link_to 'Exit', destroy_user_session_path,
+              method: :delete,
+              class: "btn btn-dark" %>
+  <%= link_to 'Edit', edit_user_registration_path,
+              class: "btn btn-dark" %>
+<% else %>
+  <%= link_to 'Sign in', destroy_user_session_path,
+              class: "btn btn-dark" %>
+  <%= link_to 'Registration', edit_user_registration_path,
+              class: "btn btn-dark" %>
+<% end %>

@@ -6,23 +6,26 @@ class ItemsController < ApplicationController
   after_action :show_info, only: %i[index]
 
   def index
-     @items = Item.all
-     @items = @items.includes(:image)
+    @items = Item.all.order :id
+    @items = @items.includes(:image)
   end
 
   def create
-    item = Item.create(items_params)
-    if item.persisted?
+    @item = Item.create(items_params)
+    if @item.persisted?
+      flash[:succsess] = 'Item was added'
       # render json: item.name, status:  :created
-      if item
+      if @item
         redirect_to items_path
       end
     else
-      render json: item.errors, status: :unprocessable_entity
+      flash.now[:error] = 'Please fill all fields correctly'
+      render :new
     end
   end
 
   def new
+    @item = Item.new
   end
 
   def show
@@ -36,16 +39,21 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(items_params)
+      flash[:succsess] = 'Item was updated'
       redirect_to item_path
     else
+      flash.now[:error] = 'Please fill all fields correctly'
       render body: 'Poka'
     end
   end
 
   def destroy
     if @item.destroy.destroyed?
-      redirect_to items_path # redirect_to '/items'
+      flash[:succsess] = 'Item was deleted'
+      #redirect_to items_path # redirect_to '/items'
+      render json: { success: true }
     else
+      flash[:error] = "Item wasn't deleted"
       render json: item.errors, status: :unprocessable_entity
     end
   end
@@ -56,14 +64,14 @@ class ItemsController < ApplicationController
   end
 
   def expensive
-    @items = Item.where("price>220")
+    @items = Item.where('price>220')
     render :index
   end
 
   private
 
   def items_params
-    params.permit(:name, :price, :real, :weight, :description)
+    params.require(:item).permit(:name, :price, :description)
   end
 
   def find_item
@@ -77,7 +85,7 @@ class ItemsController < ApplicationController
   # end
 
   def show_info
-    puts "Index endpoint"
+    puts 'Index endpoint'
   end
 
 end

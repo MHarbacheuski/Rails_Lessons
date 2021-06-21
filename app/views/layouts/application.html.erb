@@ -2,16 +2,26 @@
 <html>
   <head>
     <title>RailsRgw</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag asset_path('1.jpg') %>
   </head>
 
+  <!--devise-->
+    <%= render 'include/auth/auth_header' %>
+  <!--devise-->
   <body>
-  <h1>Rails Course</h1>
+
+  <div class="jumbotron vertical-centre">
+    <div  class="container">
+  <h2 style="color: #B00100">User Panel</h2>
+  <%= render 'include/main/notification' %>
     <%= yield %>
+    </div>
+  </div>
   </body>
 </html>
